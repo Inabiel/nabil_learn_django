@@ -1,10 +1,9 @@
 from django.http import HttpRequest
 from polls.service.user import UserService
-from django.core import serializers
 from polls.utils.responser import Responser
-from django.views.decorators.csrf import csrf_exempt
+import json
 
-@csrf_exempt
+# @csrf_exempt
 def get_user(request: HttpRequest):
     if request.method == "GET":
         getAllUser = UserService().getAllUser()
@@ -14,5 +13,11 @@ def get_user(request: HttpRequest):
         return Responser().Failed("","Unknown Method", 405)
     
 
-def create_user(request):
-    data = request.POST
+def create_user(request: HttpRequest):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        addUsr = UserService().insertUser(data['name'])
+        if(addUsr):
+            return Responser().Success([],"ok", 200)
+    else:
+        return Responser().Failed("","Unknown Method", 405)
