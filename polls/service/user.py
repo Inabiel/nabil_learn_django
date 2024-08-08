@@ -10,13 +10,13 @@ class UserService:
         return self.user_repository.get().values()
     
     def getSpecificUser(self, name) -> User:
-        return self.user_repository.getByCondition(name=name)
+        return self.user_repository.getByCondition(name=name).first()
 
     def insertUser(self, name) -> User:
         return self.user_repository.save(name=name)
     
-    def updateUser(self, name, **kwargs) -> User:
-        getUser = self.user_repository.getByCondition(name=name)
+    def updateUser(self, id, **kwargs) -> User:
+        getUser = self.user_repository.getByCondition(id=id)
         return self.user_repository.update(getUser, **kwargs)
     
     def deleteUser(self, name) -> None:
